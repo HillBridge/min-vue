@@ -71,7 +71,8 @@ describe("effect", () => {
     obj.prop = 2
     expect(dummp).toBe(2)
     stop(runner)
-    obj.prop = 3
+    // obj.prop = 3
+    obj.prop++  // obj.prop = obj.prop + 1, 先触发get --> track, 再触发set --> trigger
     expect(dummp).toBe(2)
 
     

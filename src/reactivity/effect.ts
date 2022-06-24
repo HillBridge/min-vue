@@ -1,4 +1,7 @@
 import { extend } from './../shared/index';
+let activeEffect;
+let shouldTrack;
+
 // 面向对象的思想，抽离
 class ReactiveEffect {
   private _fn: any
@@ -12,8 +15,17 @@ class ReactiveEffect {
   }
 
   run(){
+    if(!this.active){
+      // 说明执行了stop，则不进行依赖收集
+      return this._fn()
+    }
+
     activeEffect = this
-    return this._fn()
+    shouldTrack = true
+    const result = this._fn()
+    // reset
+    shouldTrack = false
+    return result
   }
 
   stop(){
@@ -32,13 +44,17 @@ const cleanupEffect = (effect) => {
   effect.deps.forEach((dep: any) => {
     dep.delete(effect)
   })
+  effect.deps.length = 0
+}
+function isTracking() {
+  return shouldTrack && activeEffect
 }
 
 // 全局变量map维护所有收集的依赖（大盒子），每个key用小盒子装所对应的依赖（fn）
 const targetMap = new Map()
 export function track(target,key) {
+  if(!isTracking()) return;
   // target -> key -> dep
-
   let depsMap = targetMap.get(target)
   if(!depsMap){
     depsMap = new Map()
@@ -49,12 +65,10 @@ export function track(target,key) {
     dep = new Set()
     depsMap.set(key,dep)
   }
-  if(activeEffect){
-    dep.add(activeEffect)
-    // 反向收集一下
-    activeEffect.deps.push(dep)
-  }
-  
+
+  dep.add(activeEffect)
+  // 反向收集一下
+  activeEffect.deps.push(dep)
 }
 
 // 依赖收集的主要目的是，当响应式对象的值发生变化时，会出发对应set钩子函数，此时会把最新的值进行赋值，但此时如effect回调中的nextAge并没有更新，所有需要重新执行一下effect, 而我们收集的依赖就是这个effect回调。
@@ -70,8 +84,6 @@ export function trigger(target,key) {
     }
   }
 }
-
-let activeEffect;
 
 export function effect(fn, options: any= {}) {
   const _effect = new ReactiveEffect(fn, options.scheduler)
