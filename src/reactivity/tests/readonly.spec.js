@@ -21,9 +21,10 @@ describe("readonly", () => {
   })
 
   it("isReadonly", () => {
-    const jack = { age: 10 }
+    const jack = { age: 10, foo: { bar: 1} }
     const reactiveJack = readonly(jack)
     expect(isReadonly(reactiveJack)).toBe(true)
     expect(isReadonly(jack)).toBe(false)
+    expect(isReadonly(reactiveJack.foo)).toBe(true)
   })
 })

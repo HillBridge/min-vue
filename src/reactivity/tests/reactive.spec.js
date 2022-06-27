@@ -10,9 +10,10 @@ describe("reactive",() => {
     expect(reactiveJack.age).toBe(10)
   }),
   it("isReactive", () => {
-    const jack = { age: 10 }
+    const jack = { age: 10, foo: { bar: 1 } }
     const reactiveJack = reactive(jack)
     expect(isReactive(reactiveJack)).toBe(true)
     expect(isReactive(jack)).toBe(false)
+    expect(isReactive(reactiveJack.foo)).toBe(true)
   })
 })
