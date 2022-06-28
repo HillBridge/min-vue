@@ -1,4 +1,4 @@
-import { reactive, isReactive } from "../reactive";
+import { reactive, isReactive, isProxy } from "../reactive";
 
 describe("reactive",() => {
   it("happy path", () => {
@@ -14,6 +14,7 @@ describe("reactive",() => {
     const reactiveJack = reactive(jack)
     expect(isReactive(reactiveJack)).toBe(true)
     expect(isReactive(jack)).toBe(false)
+    expect(isProxy(reactiveJack)).toBe(true)
     expect(isReactive(reactiveJack.foo)).toBe(true)
   })
 })

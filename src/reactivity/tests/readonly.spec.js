@@ -1,4 +1,4 @@
-import { readonly, isReadonly } from "../reactive"
+import { readonly, isReadonly, isProxy } from "../reactive"
 
 describe("readonly", () => {
   it("when call get", () => {
@@ -25,6 +25,7 @@ describe("readonly", () => {
     const reactiveJack = readonly(jack)
     expect(isReadonly(reactiveJack)).toBe(true)
     expect(isReadonly(jack)).toBe(false)
+    expect(isProxy(jack)).toBe(false)
     expect(isReadonly(reactiveJack.foo)).toBe(true)
   })
 })

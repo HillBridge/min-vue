@@ -46,7 +46,7 @@ const cleanupEffect = (effect) => {
   })
   effect.deps.length = 0
 }
-function isTracking() {
+export function isTracking() {
   return shouldTrack && activeEffect
 }
 
@@ -65,7 +65,11 @@ export function track(target,key) {
     dep = new Set()
     depsMap.set(key,dep)
   }
+  // 收集依赖
+  trackEffects(dep)
+}
 
+export function trackEffects(dep) {
   dep.add(activeEffect)
   // 反向收集一下
   activeEffect.deps.push(dep)
@@ -76,6 +80,11 @@ export function track(target,key) {
 export function trigger(target,key) {
   const depsMap = targetMap.get(target)
   const dep = depsMap.get(key)
+  // 触发依赖
+  triggerEffects(dep)
+}
+
+export function triggerEffects(dep) {
   for (const effect of dep) {
     if(effect.scheduler){
       effect.scheduler()
