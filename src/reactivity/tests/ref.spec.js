@@ -1,4 +1,4 @@
-import { ref, isRef, unRef } from "../ref";
+import { ref, isRef, unRef, proxyRefs } from "../ref";
 import { effect } from "../effect";
 import { reactive } from "../reactive";
 
@@ -53,6 +53,26 @@ describe("ref", () => {
     const a = ref(1)
     expect(unRef(a)).toBe(1)
     expect(unRef(2)).toBe(2)
+  })
+
+  it("proxyRefs", () => {
+    // proxyRefs 里面的key对应的val如果为ref， 当取值的时候可以省略value
+    const user = {
+      age: ref(10),
+      name: "Lee"
+    }
+    const proxyUser = proxyRefs(user)
+    expect(user.age.value).toBe(10)
+    expect(proxyUser.age).toBe(10)
+    expect(proxyUser.name).toBe("Lee")
+
+    proxyUser.age = 20
+    expect(user.age.value).toBe(20)
+    expect(proxyUser.age).toBe(20)
+
+    proxyUser.age = ref(30)
+    expect(user.age.value).toBe(30)
+    expect(proxyUser.age).toBe(30)
   })
 
 })

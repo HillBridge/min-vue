@@ -47,3 +47,18 @@ export function isRef(ref) {
 export function unRef(ref) {
   return isRef(ref) ? ref.value : ref
 }
+
+export function proxyRefs(raw) {
+  return new Proxy(raw, {
+    get(target, key) {
+      // 判断传过来的val是否为一个ref， 如果是ref就返回ref.value, 否则直接返回值
+      return unRef(Reflect.get(target, key))
+    },
+    set(target, key, value) {
+      if(isRef(Reflect.get(target, key)) && !isRef(value)){
+        return target[key].value = value
+      }
+      return Reflect.set(target, key, value)
+    },
+  })
+}
