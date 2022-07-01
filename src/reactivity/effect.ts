@@ -3,13 +3,13 @@ let activeEffect;
 let shouldTrack;
 
 // 面向对象的思想，抽离
-class ReactiveEffect {
+export class ReactiveEffect {
   private _fn: any
-  scheduler: any
+  public scheduler: Function | undefined
   deps = []
   active = true
   onStop?: () => void
-  constructor(fn, scheduler){
+  constructor(fn, scheduler? : Function){
     this._fn = fn
     this.scheduler = scheduler
   }
