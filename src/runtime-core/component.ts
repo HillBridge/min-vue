@@ -2,7 +2,9 @@ export function createComponentInstance(vnode) {
   // 创建component实例，方便以后将一些属性放在实例上处理
   const component = {
     vnode,
-    type: vnode.type
+    type: vnode.type,
+    setupState: null,
+    proxy: null
   }
   return component
 }
@@ -12,11 +14,22 @@ export function setupComponent(instance) {
   // initProps
   // initSlots
   
-  // 处理有状态的组件
+  // 处理有状态的组件(setup)
   setupStatefulComponent(instance)
 }
 
 function setupStatefulComponent(instance: any) {
+  
+  instance.proxy = new Proxy({}, {
+    get(target, key) {
+      const { setupState } = instance
+      // setupState
+      if(key in setupState){
+        return setupState[key]
+      }
+      
+    },
+  })
   const Component = instance.type
   const {setup} = Component
 

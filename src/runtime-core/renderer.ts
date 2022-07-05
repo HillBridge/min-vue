@@ -56,7 +56,8 @@ function mountComponent(vnode: any, container: any) {
   setupRenderEffect(instance, container)
 }
 function setupRenderEffect( instance, container: any) {
-  const subTree = instance.render()
+  const { proxy } = instance
+  const subTree = instance.render.call(proxy)
 
   //重新调用patch
   patch(subTree, container)
