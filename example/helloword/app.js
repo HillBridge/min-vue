@@ -1,6 +1,8 @@
 import { h } from "../../lib/guide-min-vue.esm.js";
+window.self = null
 export const App = {
   render(){
+    window.self = this
     // setupState
     // $el
     // $data

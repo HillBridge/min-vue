@@ -23,7 +23,8 @@ function processElement(vnode: any, container: any) {
 
 function mountElement(vnode: any, container: any) {
   const { type, props, children } = vnode
-   const el = document.createElement(type)
+  // const el = document.createElement(type)
+  const el = (vnode.el = document.createElement(type))
   
   if(typeof children === "string"){
     el.textContent = children
@@ -53,14 +54,18 @@ function mountComponent(vnode: any, container: any) {
   setupComponent(instance)
 
   // 调用render, 处理subtree
-  setupRenderEffect(instance, container)
+  setupRenderEffect(instance, vnode, container)
 }
-function setupRenderEffect( instance, container: any) {
+function setupRenderEffect( instance, vnode, container: any) {
   const { proxy } = instance
   const subTree = instance.render.call(proxy)
 
   //重新调用patch
   patch(subTree, container)
+  // 当所有的节点都patch完后
+  vnode.el = subTree.el
+
+  console.log("subTree",subTree)
 }
 
 
