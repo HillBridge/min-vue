@@ -1,3 +1,5 @@
+import { PublicInstanceProxyHandlers } from "./componentPublicInstance"
+
 export function createComponentInstance(vnode) {
   // 创建component实例，方便以后将一些属性放在实例上处理
   const component = {
@@ -20,23 +22,7 @@ export function setupComponent(instance) {
 
 function setupStatefulComponent(instance: any) {
   
-  instance.proxy = new Proxy({}, {
-    get(target, key) {
-      const { setupState } = instance
-      // setupState
-      if(key in setupState){
-        return setupState[key]
-      }
-      // debugger;
-      console.log("target",target)
-      console.log("key",key)
-      if(key === '$el'){
-        return instance.vnode.el
-      }
-      
-      
-    },
-  })
+  instance.proxy = new Proxy({ _: instance}, PublicInstanceProxyHandlers)
   const Component = instance.type
   const {setup} = Component
 

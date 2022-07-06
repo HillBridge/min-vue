@@ -48,22 +48,22 @@ function processComponent(vnode,container) {
   mountComponent(vnode,container)
 }
 
-function mountComponent(vnode: any, container: any) {
-  const instance = createComponentInstance(vnode)
+function mountComponent(initialVNode: any, container: any) {
+  const instance = createComponentInstance(initialVNode)
   // 处理component
   setupComponent(instance)
 
   // 调用render, 处理subtree
-  setupRenderEffect(instance, vnode, container)
+  setupRenderEffect(instance, initialVNode, container)
 }
-function setupRenderEffect( instance, vnode, container: any) {
+function setupRenderEffect( instance, initialVNode, container: any) {
   const { proxy } = instance
   const subTree = instance.render.call(proxy)
 
   //重新调用patch
   patch(subTree, container)
   // 当所有的节点都patch完后
-  vnode.el = subTree.el
+  initialVNode.el = subTree.el
 
   console.log("subTree",subTree)
 }
