@@ -3,10 +3,13 @@ const publicPropertiesMap = {
 }
 export const PublicInstanceProxyHandlers = {
   get({ _: instance }, key) {
-    const { setupState } = instance
+    const { setupState,props } = instance
     // setupState
-    if(key in setupState){
+    const hasOwn = (val,key) => Object.prototype.hasOwnProperty.call(val,key)
+    if(hasOwn(setupState,key)){
       return setupState[key]
+    }else if(hasOwn(props,key)){
+      return props[key]
     }
 
     const publicGetter = publicPropertiesMap[key]

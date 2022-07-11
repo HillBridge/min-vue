@@ -8,7 +8,7 @@ export function render(vnode, container) {
 
 function patch(vnode,container) {
   // 根据type处理对应的逻辑， type为组件处理组件，type为element处理element
-  console.log("vnode",vnode.type)
+  // console.log("vnode",vnode.type)
   if(typeof vnode.type === "string"){
     processElement(vnode,container)
   }else if(isObject(vnode.type)){
@@ -32,7 +32,7 @@ function mountElement(vnode: any, container: any) {
     mountChildren(children,el)
   }
   for (const key in props) {
-    console.log("mountElement",key)
+    // console.log("mountElement",key)
     const val = props[key]
     // on + 大写
     const isOn = (key) => /^on[A-Z]/.test(key)
@@ -74,7 +74,7 @@ function setupRenderEffect( instance, initialVNode, container: any) {
   // 当所有的节点都patch完后
   initialVNode.el = subTree.el
 
-  console.log("subTree",subTree)
+  // console.log("subTree",subTree)
 }
 
 
