@@ -14,7 +14,12 @@ export const App = {
     // ])
     return h("div",{}, [
       h("p",{},"hi,"+this.msg),
-      h(Foo, {count: 1})
+      h(Foo, {
+        count: 1, 
+        onAdd(a,b){
+          console.log("App-on-add",a,b)
+        }
+      })
     ])
   },
   setup(){
