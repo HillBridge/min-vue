@@ -9,8 +9,8 @@ export const Foo = {
     props.count++
 
     const emitAdd = () => {
-      console.log("emit-add")
       emit("add",1,2)
+      emit("add-foo")
     }
     return {
       emitAdd

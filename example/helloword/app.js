@@ -18,6 +18,9 @@ export const App = {
         count: 1, 
         onAdd(a,b){
           console.log("App-on-add",a,b)
+        },
+        onAddFoo(){
+          console.log("App-on-add-foo")
         }
       })
     ])
