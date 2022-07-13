@@ -1,4 +1,4 @@
-import { h } from "../../lib/guide-min-vue.esm.js"
+import { h, renderSlots } from "../../lib/guide-min-vue.esm.js"
 
 export const Foo = {
   setup(props, { emit }){
@@ -16,10 +16,15 @@ export const Foo = {
       emitAdd
     }
   },
+  // render(){
+  //   // 2. 获取props
+  //   const btn = h("button",{onClick: this.emitAdd },"emitAdd")
+  //   const foo = h("div",{},"foo:"+this.count)
+  //   return h("div",{},[foo,btn])
+  // }
   render(){
-    // 2. 获取props
-    const btn = h("button",{onClick: this.emitAdd },"emitAdd")
-    const foo = h("div",{},"foo:"+this.count)
-    return h("div",{},[foo,btn])
+    const foo = h("p",{},"foo")
+    console.log("slots",this.$slots)
+    return h("div",{},[foo,renderSlots(this.$slots)])
   }
 }

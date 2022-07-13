@@ -12,18 +12,22 @@ export const App = {
     //   h("p",{class: "red"}, "hi~~~"),
     //   h("p",{class: "blue"}, "min-vue")
     // ])
-    return h("div",{}, [
-      h("p",{},"hi,"+this.msg),
-      h(Foo, {
-        count: 1, 
-        onAdd(a,b){
-          console.log("App-on-add",a,b)
-        },
-        onAddFoo(){
-          console.log("App-on-add-foo")
-        }
-      })
-    ])
+    // return h("div",{}, [
+    //   h("p",{},"hi,"+this.msg),
+    //   h(Foo, {
+    //     count: 1, 
+    //     onAdd(a,b){
+    //       console.log("App-on-add",a,b)
+    //     },
+    //     onAddFoo(){
+    //       console.log("App-on-add-foo")
+    //     }
+    //   })
+    // ])
+    const app = h("div",{}, "App")
+    // const foo = h(Foo,{}, [h("p",{},"123"),h("p",{},"456")])
+    const foo = h(Foo,{}, h("p",{},"123"))
+    return h("div",{}, [app,foo])
   },
   setup(){
     return {
