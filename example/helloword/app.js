@@ -25,8 +25,16 @@ export const App = {
     //   })
     // ])
     const app = h("div",{}, "App")
+    // ====== array
     // const foo = h(Foo,{}, [h("p",{},"123"),h("p",{},"456")])
-    const foo = h(Foo,{}, h("p",{},"123"))
+
+    // const foo = h(Foo,{}, h("p",{},"123"))
+
+    // ======object
+    const foo = h(Foo,{}, {
+      header: h("p",{},"header"),
+      footer: h("p",{},"footer")
+    })
     return h("div",{}, [app,foo])
   },
   setup(){

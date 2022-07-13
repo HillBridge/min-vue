@@ -25,6 +25,7 @@ export const Foo = {
   render(){
     const foo = h("p",{},"foo")
     console.log("slots",this.$slots)
-    return h("div",{},[foo,renderSlots(this.$slots)])
+    // 具名插槽
+    return h("div",{},[renderSlots(this.$slots,"header"),foo,renderSlots(this.$slots,"footer")])
   }
 }
