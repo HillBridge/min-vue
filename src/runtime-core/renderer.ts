@@ -9,11 +9,25 @@ export function render(vnode, container) {
 function patch(vnode,container) {
   // 根据type处理对应的逻辑， type为组件处理组件，type为element处理element
   // console.log("vnode",vnode.type)
-  if(typeof vnode.type === "string"){
-    processElement(vnode,container)
-  }else if(isObject(vnode.type)){
-    processComponent(vnode,container)
+
+  switch (vnode.type) {
+    case "Fragment":
+      processFragment(vnode.children,container)
+      break;
+  
+    default:
+      if(typeof vnode.type === "string"){
+        processElement(vnode,container)
+      }else if(isObject(vnode.type)){
+        processComponent(vnode,container)
+      }
+      break;
   }
+  
+}
+
+function processFragment(vnode: any, container: any) {
+  mountChildren(vnode,container)
 }
 
 function processElement(vnode: any, container: any) {
