@@ -1,5 +1,6 @@
 import { isObject } from './../shared/index';
 import { createComponentInstance, setupComponent } from "./component"
+import { Fragment, Text } from './vnode';
 
 export function render(vnode, container) {
   // patch
@@ -11,8 +12,12 @@ function patch(vnode,container) {
   // console.log("vnode",vnode.type)
 
   switch (vnode.type) {
-    case "Fragment":
+    case Fragment:
       processFragment(vnode.children,container)
+      break;
+
+    case Text:
+      processText(vnode,container)
       break;
   
     default:
@@ -25,6 +30,15 @@ function patch(vnode,container) {
   }
   
 }
+
+function processText(vnode: any, container: any) {
+  // todo
+  const { children } = vnode
+  const textNode = (vnode.el = document.createTextNode(children))
+  container.append(textNode)
+}
+
+
 
 function processFragment(vnode: any, container: any) {
   mountChildren(vnode,container)

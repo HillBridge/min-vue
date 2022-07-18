@@ -1,9 +1,11 @@
-import { createVnode } from "../vnode";
+import { createVnode, Fragment } from "../vnode";
 
 export function renderSlots(slots, name) {
   const slot = slots[name]
   if(slot){
-    return createVnode("Fragment",{}, slot)
+    return createVnode(Fragment,{}, slot)
   }
-  
 }
+
+
+
