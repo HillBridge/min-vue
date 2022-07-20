@@ -4,7 +4,7 @@ import { initProps } from "./componentProps"
 import { PublicInstanceProxyHandlers } from "./componentPublicInstance"
 import { initSlots } from "./componentSlots"
 
-export function createComponentInstance(vnode) {
+export function createComponentInstance(vnode,parent) {
   // 创建component实例，方便以后将一些属性放在实例上处理
   const component = {
     vnode,
@@ -13,6 +13,8 @@ export function createComponentInstance(vnode) {
     proxy: null,
     props: {},
     slots: {},
+    provides: {},
+    parent,
     emit: () => {}
   }
 
