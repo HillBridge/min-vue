@@ -4,11 +4,20 @@ import { createApp, h, provide, inject } from "../../lib/guide-min-vue.esm.js";
 const Provider = {
   name: "Provider",
   render(){
-    return h("div",{}, [h("p",{},"Provider"),h(Consumer)])
+    return h("div",{}, [h("p",{},"Provider"),h(ProviderTwo)])
   },
   setup(){
     provide("foo","foo")
     provide("bar","bar")
+  }
+}
+
+const ProviderTwo = {
+  name: "Provider",
+  render(){
+    return h("div",{}, [h("p",{},"ProviderTwo"),h(Consumer)])
+  },
+  setup(){
   }
 }
 

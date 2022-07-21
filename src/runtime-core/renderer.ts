@@ -2,7 +2,7 @@ import { isObject } from './../shared/index';
 import { createComponentInstance, setupComponent } from "./component"
 import { Fragment, Text } from './vnode';
 
-export function render(vnode, container,parentComponent) {
+export function render(vnode, container, parentComponent) {
   // patch
   patch(vnode,container,parentComponent)
 }
@@ -77,6 +77,7 @@ function mountElement(vnode: any, container: any, parentComponent) {
 
 function mountChildren(vnode, container, parentComponent) {
   vnode.forEach(ele => {
+    // 当children为数组时，需要重新调用patch
     patch(ele, container, parentComponent)
   });
 }
@@ -95,9 +96,11 @@ function mountComponent(initialVNode: any, container: any, parentComponent) {
 }
 function setupRenderEffect( instance, initialVNode, container: any) {
   const { proxy } = instance
+  // 调用render 得到subtree, subtree中的可以获取到setup、props、 $el 、 $slots等
+  // 通过call 将render的this 指向在setupStatefulComponet(setup)中处理的 proxy
   const subTree = instance.render.call(proxy)
 
-  //重新调用patch
+  //得到subtree之后要重新调用patch，重新调用patch
   patch(subTree, container, instance)
   // 当所有的节点都patch完后
   initialVNode.el = subTree.el

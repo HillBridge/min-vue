@@ -8,7 +8,7 @@ export const PublicInstanceProxyHandlers = {
   get({ _: instance }, key) {
     const { setupState,props } = instance
     // setupState
-    
+    // Object.prototype.hasOwnProperty.call(obj,key)
     if(hasOwn(setupState,key)){
       return setupState[key]
     }else if(hasOwn(props,key)){
