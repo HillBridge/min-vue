@@ -15,23 +15,31 @@ const Provider = {
 const ProviderTwo = {
   name: "Provider",
   render(){
-    return h("div",{}, [h("p",{},"ProviderTwo"),h(Consumer)])
+    return h("div",{}, [h("p",{},"ProviderTwo---"+this.foo),h(Consumer)])
   },
   setup(){
+    provide("fooTwo","fooTwo")
+    const foo = inject("foo")
+
+    return {
+      foo
+    }
   }
 }
 
 const Consumer = {
   name: "Consumer",
   render(){
-    return h("div",{}, `Consumer---${this.foo}---${this.bar}`)
+    return h("div",{}, `Consumer---${this.fooTwo}---${this.bar}---${this.baz}`)
   },
   setup(){
-    const foo = inject("foo")
+    const fooTwo = inject("fooTwo")
     const bar = inject("bar")
+    const baz = inject("baz", "bazDefault")
     return {
-      foo,
-      bar
+      fooTwo,
+      bar,
+      baz
     }
   }
 }
