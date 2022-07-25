@@ -1,4 +1,5 @@
 import { shallowReadonly } from "../reactivity/reactive"
+import { proxyRefs } from "../reactivity/ref"
 import { emit } from "./componentEmit"
 import { initProps } from "./componentProps"
 import { PublicInstanceProxyHandlers } from "./componentPublicInstance"
@@ -52,7 +53,7 @@ function setupStatefulComponent(instance: any) {
 }
 function handleSetupResult(instance, setupResult: any) {
   if(typeof setupResult === "object"){
-    instance.setupState = setupResult
+    instance.setupState = proxyRefs(setupResult) 
   }
   // 处理完setup后看看组件实例上是否有render
 
