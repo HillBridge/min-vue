@@ -5,7 +5,7 @@ import { createAppApi } from './createApp';
 import { Fragment, Text } from './vnode';
 
 export function createRenderer(options) {
-  const { createElement, patchProp, insert } = options
+  const { createElement: hostCreateElement, patchProp: hostPatchProp, insert: hostInsert } = options
 
   function render(n2, container, parentComponent) {
   // patch
@@ -60,17 +60,40 @@ export function createRenderer(options) {
     console.log("patchElement")
     console.log("n1", n1)
     console.log("n2", n2)
-
+    const oldProps = n1.props || {}
+    const newProps = n2.props || {}
+    const el = (n2.el = n1.el)
     // props
-
+    patchProps(el,oldProps,newProps)
     // children
+  }
+
+  function patchProps(el,oldProps,newProps) {
+    // 遍历新的值，对应的属性修改了就替换
+    if(oldProps !== newProps){
+      for (const key in newProps) {
+        const prevProp = oldProps[key]
+        const nextProp = newProps[key]
+        if(prevProp !== nextProp){
+          hostPatchProp(el, key, prevProp, nextProp)
+        }
+      }
+    } 
+    
+
+    // 遍历老的值，对应的key在新的值里没有要删除
+    for (const key in oldProps) {
+      if(!(key in newProps)){
+        hostPatchProp(el, key, oldProps[key], null)
+      }
+    }
   }
 
 
   function mountElement(n1, n2: any, container: any, parentComponent) {
     const { type, props, children } = n2
     // const el = document.createElement(type)
-    const el = (n2.el = createElement(type))
+    const el = (n2.el = hostCreateElement(type))
     
     if(typeof children === "string"){
       el.textContent = children
@@ -81,10 +104,10 @@ export function createRenderer(options) {
       // console.log("mountElement",key)
       const val = props[key]
       
-      patchProp(el, key, val)
+      hostPatchProp(el, key, null, val)
     }
     // insert
-    insert(el, container)
+    hostInsert(el, container)
     // container.append(el)
   }
 
