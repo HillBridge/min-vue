@@ -29,6 +29,13 @@ export const App = {
         foo: "foo"
       }
     }
+    const onChangePropsDemo4 = () => {
+      props.value = {
+        foo: "foo",
+        bar: "bar",
+        baz: "baz"
+      }
+    }
 
     return {
       count,
@@ -36,7 +43,8 @@ export const App = {
       props,
       onChangePropsDemo1,
       onChangePropsDemo2,
-      onChangePropsDemo3
+      onChangePropsDemo3,
+      onChangePropsDemo4
     }
   },
   render(){
@@ -59,7 +67,10 @@ export const App = {
         }, "prop值改为undefined---删除"),
         h("button", {
           onClick: this.onChangePropsDemo3
-        }, "prop值少了---删除")
+        }, "prop值少了---删除"),
+        h("button", {
+          onClick: this.onChangePropsDemo4
+        }, "prop值增加了---增加")
       ]
     )
   }

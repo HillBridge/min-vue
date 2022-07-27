@@ -1,4 +1,5 @@
 import { effect } from '../reactivity/effect';
+import { ShapeFlags } from '../shared/ShapeFlags';
 import { isObject } from './../shared/index';
 import { createComponentInstance, setupComponent } from "./component"
 import { createAppApi } from './createApp';
@@ -16,6 +17,7 @@ export function createRenderer(options) {
   function patch(n1, n2,container,parentComponent) {
     // 根据type处理对应的逻辑， type为组件处理组件，type为element处理element
     // console.log("vnode",vnode.type)
+    const { shapeFlag } = n2
 
     switch (n2.type) {
       case Fragment:
@@ -27,9 +29,9 @@ export function createRenderer(options) {
         break;
     
       default:
-        if(typeof n2.type === "string"){
+        if(shapeFlag & ShapeFlags.ELEMENT){
           processElement(n1, n2, container, parentComponent)
-        }else if(isObject(n2.type)){
+        }else if(shapeFlag & ShapeFlags.SATAEFUL_COMPONENT){
           processComponent(n1, n2,container, parentComponent)
         }
         break;
@@ -91,13 +93,13 @@ export function createRenderer(options) {
 
 
   function mountElement(n1, n2: any, container: any, parentComponent) {
-    const { type, props, children } = n2
+    const { type, props, children, shapeFlag } = n2
     // const el = document.createElement(type)
     const el = (n2.el = hostCreateElement(type))
     
-    if(typeof children === "string"){
+    if(shapeFlag & ShapeFlags.TEXT_CHILDREN){
       el.textContent = children
-    }else if(isObject(children)){
+    }else if(shapeFlag & ShapeFlags.ARRAY_CHILDREN){
       mountChildren(n1, children,el, parentComponent)
     }
     for (const key in props) {
