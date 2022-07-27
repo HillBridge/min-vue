@@ -15,15 +15,15 @@ export default {
     }
   },
   render(){
-    return isChange ? 
+    return this.isChange ? 
     h(
       "div",
-      {},
+      {id: "new"},
       nextChildren
     ) :
     h(
       "div",
-      {},
+      {id: "old"},
       prevChildren
     )
   }

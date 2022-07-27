@@ -89,6 +89,10 @@ export function createRenderer(options) {
 
         // 设置新值的text
         hostSetElementText(container, c2)
+      }else if(prevShapFlag & ShapeFlags.TEXT_CHILDREN){
+        // 老值是text, 那么此刻就是  text => text
+
+        hostSetElementText(container, c2)
       }
     }
   }
