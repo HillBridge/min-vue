@@ -1,12 +1,17 @@
 import { effect } from '../reactivity/effect';
 import { ShapeFlags } from '../shared/ShapeFlags';
-import { isObject } from './../shared/index';
 import { createComponentInstance, setupComponent } from "./component"
 import { createAppApi } from './createApp';
 import { Fragment, Text } from './vnode';
 
 export function createRenderer(options) {
-  const { createElement: hostCreateElement, patchProp: hostPatchProp, insert: hostInsert } = options
+  const { 
+    createElement: hostCreateElement,
+    patchProp: hostPatchProp,
+    insert: hostInsert,
+    remove: hostRemove,
+    setElementText: hostSetElementText
+  } = options
 
   function render(n2, container, parentComponent) {
   // patch
@@ -68,6 +73,32 @@ export function createRenderer(options) {
     // props
     patchProps(el,oldProps,newProps)
     // children
+    patchChildren(n1,n2,el)
+  }
+
+  function patchChildren(n1,n2,container) {
+    const prevShapFlag = n1.shapeFlag
+    const { shapeFlag } = n2
+    const c2 = n2.children
+    // 新值为text
+    if(shapeFlag & ShapeFlags.TEXT_CHILDREN){
+      if(prevShapFlag & ShapeFlags.ARRAY_CHILDREN){
+        // 老值是array, 那么此刻就是  Array => text
+        // 先清除老的children
+        unmountChildren(n1.children)
+
+        // 设置新值的text
+        hostSetElementText(container, c2)
+      }
+    }
+  }
+
+
+  function unmountChildren(children) {
+    for(let i=0; i<children.length; i++){
+      const el = children[i].el
+      hostRemove(el)
+    }
   }
 
   function patchProps(el,oldProps,newProps) {
