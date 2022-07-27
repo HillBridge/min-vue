@@ -105,6 +105,10 @@ export function createRenderer(options) {
         hostSetElementText(container, "")
         // 再绑定children
         mountChildren(null, n2.children, container, parentComponent)
+      } else if(prevShapFlag & ShapeFlags.ARRAY_CHILDREN){
+        // array => array
+        unmountChildren(c1)
+        mountChildren(null, n2.children, container, parentComponent)
       }
     }
   }
