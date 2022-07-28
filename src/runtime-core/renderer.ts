@@ -107,6 +107,7 @@ export function createRenderer(options) {
         mountChildren(null, n2.children, container, parentComponent)
       } else if(prevShapFlag & ShapeFlags.ARRAY_CHILDREN){
         // array => array
+        // 不能单纯的直接进行替换，这样性能消耗大，应该逐一对比里面的每个元素
         unmountChildren(c1)
         mountChildren(null, n2.children, container, parentComponent)
       }

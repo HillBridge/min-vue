@@ -1,6 +1,6 @@
 import { h, ref } from "../../lib/guide-min-vue.esm.js";
 
-const nextChildren = [h("div",{},"C"),h("div",{},"D")]
+const nextChildren = [h("div",{},"CCC"),h("div",{},"DDD")]
 const prevChildren = [h("div",{},"A"),h("div",{},"B")]
 
 export default {
