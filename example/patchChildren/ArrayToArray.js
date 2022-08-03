@@ -1,10 +1,21 @@
 import { h, ref } from "../../lib/guide-min-vue.esm.js";
 
-const nextChildren = [h("div",{},"CCC"),h("div",{},"DDD")]
-const prevChildren = [h("div",{},"A"),h("div",{},"B")]
+// 左侧对比
+const prevChildren = [
+  h("div",{key: "A"}, "A"),
+  h("div",{key: "B"}, "B"),
+  h("div",{key: "C"}, "C")
+]
+
+const nextChildren = [
+  h("div",{key: "A"}, "A"),
+  h("div",{key: "B"}, "B"),
+  h("div",{key: "D"}, "D"),
+  h("div",{key: "E"}, "E")
+]
 
 export default {
-  name: "ArrayToText",
+  name: "ArrayToArray",
   setup(){
 
     const isChange = ref(false)

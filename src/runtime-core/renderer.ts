@@ -49,7 +49,7 @@ export function createRenderer(options) {
     const { children } = n2
     const textNode = (n2.el = document.createTextNode(children))
     container.append(textNode)
-  }
+  }                           
 
   function processFragment(n1, n2: any, container: any, parentComponent) {
     mountChildren(n1, n2,container, parentComponent)
@@ -108,10 +108,30 @@ export function createRenderer(options) {
       } else if(prevShapFlag & ShapeFlags.ARRAY_CHILDREN){
         // array => array
         // 不能单纯的直接进行替换，这样性能消耗大，应该逐一对比里面的每个元素
-        unmountChildren(c1)
-        mountChildren(null, n2.children, container, parentComponent)
+        patchKeyedChildren(c1, c2, container, parentComponent)
       }
     }
+  }
+
+  function patchKeyedChildren(c1, c2, container, parentComponent){
+    let i = 0;
+    let e1 = c1.length - 1
+    let e2 = c2.length - 1
+
+    function isSameVNodeType(n1,n2){
+      return n1.type === n2.type && n1.key === n2.key
+    }
+    while (i <= e1 && i <= e2) {
+      const n1 = c1[i]
+      const n2 = c2[i]
+      if(isSameVNodeType(n1,n2)){
+        patch(n1, n2, container, parentComponent)
+      }else{
+        break;
+      }
+      i++
+    }
+    console.log("i",i)
   }
 
 
