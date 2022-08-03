@@ -107,7 +107,7 @@ export function createRenderer(options) {
         mountChildren(null, n2.children, container, parentComponent)
       } else if(prevShapFlag & ShapeFlags.ARRAY_CHILDREN){
         // array => array
-        // 不能单纯的直接进行替换，这样性能消耗大，应该逐一对比里面的每个元素
+        // 不能单纯的直接进行替换，这样性能消耗大，应该找到不同部分进行渲染
         patchKeyedChildren(c1, c2, container, parentComponent)
       }
     }
@@ -121,6 +121,7 @@ export function createRenderer(options) {
     function isSameVNodeType(n1,n2){
       return n1.type === n2.type && n1.key === n2.key
     }
+    // 左侧
     while (i <= e1 && i <= e2) {
       const n1 = c1[i]
       const n2 = c2[i]
@@ -131,7 +132,18 @@ export function createRenderer(options) {
       }
       i++
     }
-    console.log("i",i)
+    // 右侧
+    while (i <= e1 && i <= e2) {
+      const n1 = c1[e1]
+      const n2 = c2[e2]
+      if(isSameVNodeType(n1,n2)){
+        patch(n1, n2, container, parentComponent)
+      }else{
+        break;
+      }
+      e1--
+      e2--
+    }
   }
 
 
