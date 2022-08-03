@@ -15,17 +15,41 @@ import { h, ref } from "../../lib/guide-min-vue.esm.js";
 // ]
 
 // 右侧对比
+// const prevChildren = [
+//   h("div",{key: "A"}, "A"),
+//   h("div",{key: "B"}, "B"),
+//   h("div",{key: "C"}, "C")
+// ]
+
+// const nextChildren = [
+//   h("div",{key: "E"}, "E"),
+//   h("div",{key: "D"}, "D"),
+//   h("div",{key: "B"}, "B"),
+//   h("div",{key: "C"}, "C")
+// ]
+
+// 新的比老的多（右侧）
+// const prevChildren = [
+//   h("div",{key: "A"}, "A"),
+//   h("div",{key: "B"}, "B")
+// ]
+
+// const nextChildren = [
+//   h("div",{key: "A"}, "A"),
+//   h("div",{key: "B"}, "B"),
+//   h("div",{key: "C"}, "C")
+// ]
+
+// 新的比老的多（左侧）
 const prevChildren = [
   h("div",{key: "A"}, "A"),
-  h("div",{key: "B"}, "B"),
-  h("div",{key: "C"}, "C")
+  h("div",{key: "B"}, "B")
 ]
 
 const nextChildren = [
-  h("div",{key: "E"}, "E"),
-  h("div",{key: "D"}, "D"),
-  h("div",{key: "B"}, "B"),
-  h("div",{key: "C"}, "C")
+  h("div",{key: "C"}, "C"),
+  h("div",{key: "A"}, "A"),
+  h("div",{key: "B"}, "B")
 ]
 
 export default {
