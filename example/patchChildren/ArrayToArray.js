@@ -47,10 +47,36 @@ const prevChildren = [
 ]
 
 const nextChildren = [
+  h("div",{key: "D"}, "D"),
   h("div",{key: "C"}, "C"),
   h("div",{key: "A"}, "A"),
   h("div",{key: "B"}, "B")
 ]
+
+// 老的比新的长（左侧）
+// const prevChildren = [
+//   h("div",{key: "A"}, "A"),
+//   h("div",{key: "B"}, "B"),
+//   h("div",{key: "C"}, "C")
+// ]
+
+// const nextChildren = [
+//   h("div",{key: "A"}, "A"),
+//   h("div",{key: "B"}, "B")
+// ]
+
+// 老的比新的长（右侧）
+// const prevChildren = [
+//   h("div",{key: "A"}, "A"),
+//   h("div",{key: "B"}, "B"),
+//   h("div",{key: "C"}, "C")
+// ]
+
+// const nextChildren = [
+//   h("div",{key: "B"}, "B"),
+//   h("div",{key: "C"}, "C")
+// ]
+
 
 export default {
   name: "ArrayToArray",

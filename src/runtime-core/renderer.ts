@@ -147,9 +147,17 @@ export function createRenderer(options) {
     // 新的比老的多（右侧）
     if(i > e1){
       if(i <= e2){
-        const nextPos = i + 1
-        const anchor = i + 1 < c2.length ?  c2[nextPos].el : null
-        patch(null, c2[i], container, parentComponent, anchor)
+        const nextPos = e2 + 1
+        const anchor = nextPos < c2.length ?  c2[nextPos].el : null
+        while(i <= e2){
+          patch(null, c2[i], container, parentComponent, anchor)
+          i++
+        }
+      }
+    }else if(i > e2){
+      while(i <= e1){
+        hostRemove(c1[i].el)
+        i++
       }
     }
   }
