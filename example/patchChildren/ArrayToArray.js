@@ -41,17 +41,17 @@ import { h, ref } from "../../lib/guide-min-vue.esm.js";
 // ]
 
 // 新的比老的多（左侧）
-const prevChildren = [
-  h("div",{key: "A"}, "A"),
-  h("div",{key: "B"}, "B")
-]
+// const prevChildren = [
+//   h("div",{key: "A"}, "A"),
+//   h("div",{key: "B"}, "B")
+// ]
 
-const nextChildren = [
-  h("div",{key: "D"}, "D"),
-  h("div",{key: "C"}, "C"),
-  h("div",{key: "A"}, "A"),
-  h("div",{key: "B"}, "B")
-]
+// const nextChildren = [
+//   h("div",{key: "D"}, "D"),
+//   h("div",{key: "C"}, "C"),
+//   h("div",{key: "A"}, "A"),
+//   h("div",{key: "B"}, "B")
+// ]
 
 // 老的比新的长（左侧）
 // const prevChildren = [
@@ -76,6 +76,27 @@ const nextChildren = [
 //   h("div",{key: "B"}, "B"),
 //   h("div",{key: "C"}, "C")
 // ]
+
+// 比较中间不同部分
+
+// 新老一样多
+const prevChildren = [
+  h("div",{key: "A"}, "A"),
+  h("div",{key: "B"}, "B"),
+  h("div",{key: "C", id: "C-PREV"}, "C"),
+  h("div",{key: "D"}, "D"),
+  h("div",{key: "F"}, "F"),
+  h("div",{key: "G"}, "G")
+]
+
+const nextChildren = [
+  h("div",{key: "A"}, "A"),
+  h("div",{key: "B"}, "B"),
+  h("div",{key: "E"}, "E"),
+  h("div",{key: "C", id: "C-NEXT"}, "C"),
+  h("div",{key: "F"}, "F"),
+  h("div",{key: "G"}, "G")
+]
 
 
 export default {
