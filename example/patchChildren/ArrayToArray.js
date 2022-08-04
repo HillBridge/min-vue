@@ -80,11 +80,31 @@ import { h, ref } from "../../lib/guide-min-vue.esm.js";
 // 比较中间不同部分
 
 // 新老一样多
+// const prevChildren = [
+//   h("div",{key: "A"}, "A"),
+//   h("div",{key: "B"}, "B"),
+//   h("div",{key: "C", id: "C-PREV"}, "C"),
+//   h("div",{key: "D"}, "D"),
+//   h("div",{key: "F"}, "F"),
+//   h("div",{key: "G"}, "G")
+// ]
+
+// const nextChildren = [
+//   h("div",{key: "A"}, "A"),
+//   h("div",{key: "B"}, "B"),
+//   h("div",{key: "E"}, "E"),
+//   h("div",{key: "C", id: "C-NEXT"}, "C"),
+//   h("div",{key: "F"}, "F"),
+//   h("div",{key: "G"}, "G")
+// ]
+
+// 老的比新的多
 const prevChildren = [
   h("div",{key: "A"}, "A"),
   h("div",{key: "B"}, "B"),
   h("div",{key: "C", id: "C-PREV"}, "C"),
   h("div",{key: "D"}, "D"),
+  h("div",{key: "E"}, "E"),
   h("div",{key: "F"}, "F"),
   h("div",{key: "G"}, "G")
 ]
@@ -97,7 +117,6 @@ const nextChildren = [
   h("div",{key: "F"}, "F"),
   h("div",{key: "G"}, "G")
 ]
-
 
 export default {
   name: "ArrayToArray",

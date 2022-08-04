@@ -164,6 +164,8 @@ export function createRenderer(options) {
       const s1 = i 
       const s2 = i
       // 获取新的map映射
+      const toBePatched = e2-s2 + 1
+      let patched = 0
       const keyToNewIndexMap = new Map()
       for (let i = s2; i <= e2; i++) {
         const nextChild = c2[i]
@@ -172,6 +174,10 @@ export function createRenderer(options) {
       // 遍历老的
       for (let j = s1; j <= e1; j++) {
         const prevChild = c1[j]
+        if(patched >= toBePatched){
+          hostRemove(prevChild.el)
+          continue
+        }
         let newIndex
         if(prevChild.key != null){
           newIndex = keyToNewIndexMap.get(prevChild.key)
@@ -187,6 +193,7 @@ export function createRenderer(options) {
           hostRemove(prevChild.el)
         }else{
           patch(prevChild, c2[newIndex], container, parentComponent, null)
+          patched++
         }
       }
     }
