@@ -171,6 +171,9 @@ export function createRenderer(options) {
         const nextChild = c2[i]
         keyToNewIndexMap.set(nextChild.key, i)
       }
+      // 初始化map，建立映射关系
+      const newIndexToOldIndexMap = new Array(toBePatched)
+      for (let i = 0; i < toBePatched; i++) newIndexToOldIndexMap[i] = 0
       // 遍历老的
       for (let j = s1; j <= e1; j++) {
         const prevChild = c1[j]
@@ -192,9 +195,25 @@ export function createRenderer(options) {
         if(newIndex === undefined){
           hostRemove(prevChild.el)
         }else{
+          newIndexToOldIndexMap[newIndex - s2] = j + 1 // 建立映射关系
           patch(prevChild, c2[newIndex], container, parentComponent, null)
           patched++
         }
+      }
+
+      const increasingNewIndexSequence = getSequence(newIndexToOldIndexMap)
+      let m = increasingNewIndexSequence.length
+      for (let i = toBePatched - 1; i >= 0; i--) {
+        const nextIndex = i + s2
+        const nextChild = c2[nextIndex]
+        const anchor = nextIndex+1 < c2.length ? c2[nextIndex+1].el : null
+        if(i !== increasingNewIndexSequence[m]){
+          // 移动位置
+          hostInsert(nextChild.el,container, anchor)
+        }else{
+          m--
+        }
+        
       }
     }
   }
@@ -308,7 +327,47 @@ export function createRenderer(options) {
     createApp: createAppApi(render)
   }
 }
-
+// 获取最长递增子序列
+function getSequence(arr: number[]): number[] {
+  const p = arr.slice();
+  const result = [0];
+  let i, j, u, v, c;
+  const len = arr.length;
+  for (i = 0; i < len; i++) {
+    const arrI = arr[i];
+    if (arrI !== 0) {
+      j = result[result.length - 1];
+      if (arr[j] < arrI) {
+        p[i] = j;
+        result.push(i);
+        continue;
+      }
+      u = 0;
+      v = result.length - 1;
+      while (u < v) {
+        c = (u + v) >> 1;
+        if (arr[result[c]] < arrI) {
+          u = c + 1;
+        } else {
+          v = c;
+        }
+      }
+      if (arrI < arr[result[u]]) {
+        if (u > 0) {
+          p[i] = result[u - 1];
+        }
+        result[u] = i;
+      }
+    }
+  }
+  u = result.length;
+  v = result[u - 1];
+  while (u-- > 0) {
+    result[u] = v;
+    v = p[v];
+  }
+  return result;
+}
 
 
 
