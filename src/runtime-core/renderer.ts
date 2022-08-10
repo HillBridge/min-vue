@@ -288,11 +288,21 @@ export function createRenderer(options) {
   }
 
   function processComponent(n1, n2,container, parentComponent, anchor) {
-    mountComponent(n2,container, parentComponent, anchor)
+    if(!n1){
+      mountComponent(n2,container, parentComponent, anchor)
+    }else{
+      updateComponent(n1,n2)
+    }
+  }
+
+  function updateComponent(n1,n2) {
+    const instance = (n2.component = n1.component)
+    instance.next = n2;
+    instance.update()
   }
 
   function mountComponent(initialVNode: any, container: any, parentComponent, anchor) {
-    const instance = createComponentInstance(initialVNode, parentComponent)
+    const instance = (initialVNode.component = createComponentInstance(initialVNode, parentComponent))
     // 处理component
     setupComponent(instance)
 
@@ -301,7 +311,7 @@ export function createRenderer(options) {
   }
   function setupRenderEffect( instance, initialVNode, container: any, anchor) {
     // 在处理完setup之后会调用render, 将render这部分放在effect里进行依赖收集（因为render中有响应式数据），当响应式数据进行更改的时候触发依赖，会重新获取到新的subtree
-    effect(() => {
+    instance.update = effect(() => {
       
       // 调用render 得到subtree, subtree中的可以获取到setup、props、 $el 、 $slots等
       // 通过call 将render的this 指向在setupStatefulComponet(setup)中处理的 proxy
@@ -323,6 +333,12 @@ export function createRenderer(options) {
         instance.isMounted = true
       }else{
         // update
+        const { next, vnode } = instance
+        if(next){
+          next.el = vnode.el
+          updateComponentPreRender(instance, next)
+        }
+
         const { proxy } = instance
         const subTree = instance.render.call(proxy)
         const prevSubTree = instance.subTree
@@ -337,6 +353,12 @@ export function createRenderer(options) {
   return {
     createApp: createAppApi(render)
   }
+}
+
+function updateComponentPreRender(instance, nextVnode) {
+  instance.vnode = nextVnode
+  instance.next = null
+  instance.props = nextVnode.props
 }
 // 获取最长递增子序列
 function getSequence(arr: number[]): number[] {
