@@ -16,9 +16,20 @@ function parseChildren(context) {
   let node;
   if(context.source.startsWith("{{")){
     node = parseInterPolation(context)
+  }else if(context.source.startsWith("<")){
+    if(/[a-z]/i.test(context.source)){
+      node = parseElement(context.source)
+    }
   }
   nodes.push(node)
   return nodes
+}
+
+function parseElement(content:any) {
+  return {
+    type: NodeTypes.ELEMENT,
+    tag: "div"
+  }
 }
 
 function parseInterPolation(context) {
