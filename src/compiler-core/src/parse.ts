@@ -46,12 +46,15 @@ function isEnd(context, parentTag) {
 
 function parseText(context:any) {
   let endIndex = context.source.length
-  let endToken = "{{"
-
-  const index = context.source.indexOf(endToken)
-  if(index !== -1){
-    endIndex = index
+  let endToken = ["</","{{"]
+  for (let i = 0; i < endToken.length; i++) {
+    const index = context.source.indexOf(endToken[i])
+    if(index !== -1 && endIndex > index){
+      endIndex = index
+    }
+    
   }
+  
   const content = parseTextData(context, endIndex)
   // advanceBy(context, endIndex)
   return {
