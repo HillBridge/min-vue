@@ -6,7 +6,7 @@ const enum TagType {
 
 export function baseParse(content:string) {
   const context = createParserContext(content)
-  return createRoot(parseChildren(context))
+  return createRoot(parseChildren(context, ''))
   
 }
 function createRoot(children) {
@@ -15,35 +15,61 @@ function createRoot(children) {
   }
 }
 
-function parseChildren(context) {
+function parseChildren(context, parentTag: any) {
   const nodes: any = []
-  let node;
-  if(context.source.startsWith("{{")){
-    node = parseInterPolation(context)
-  }else if(context.source.startsWith("<")){
-    if(/[a-z]/i.test(context.source)){
-      node = parseElement(context)
+  while (!isEnd(context, parentTag)) {
+    let node;
+    if(context.source.startsWith("{{")){
+      node = parseInterPolation(context)
+    }else if(context.source.startsWith("<")){
+      if(/[a-z]/i.test(context.source)){
+        node = parseElement(context)
+      }
     }
+    if(!node){
+      node = parseText(context)
+    }
+    nodes.push(node)
+   
   }
-  if(!node){
-    node = parseText(context)
+   return nodes
+}
+
+function isEnd(context, parentTag) {
+  const s = context.source
+  if(parentTag && s.startsWith("</"+parentTag+">")){
+    return true
   }
-  nodes.push(node)
-  return nodes
+
+  return !s
 }
 
 function parseText(context:any) {
-  console.log("kkk", context)
-  const content = context.source
-  advanceBy(context, content.length)
+  let endIndex = context.source.length
+  let endToken = "{{"
+
+  const index = context.source.indexOf(endToken)
+  if(index !== -1){
+    endIndex = index
+  }
+  const content = parseTextData(context, endIndex)
+  // advanceBy(context, endIndex)
   return {
     type: NodeTypes.TEXT,
     content
   }
 }
 
+function parseTextData(context:any, length) {
+  const content = context.source.slice(0,length)
+  advanceBy(context, length)
+  return content
+}
+
 function parseElement(content:any) {
-  const element = parseTag(content, TagType.Start)
+  const element: any = parseTag(content, TagType.Start)
+
+  element.children = parseChildren(content, element.tag)
 
   parseTag(content, TagType.End)
 
@@ -77,11 +103,11 @@ function parseInterPolation(context) {
 
   const rawContextLength = closeIndex - openDelimiter.length
 
-  const rawContent = context.source.slice(0, rawContextLength)
+  const rawContent = parseTextData(context,rawContextLength)
 
   const content = rawContent.trim()
 
-  advanceBy(context, rawContextLength+closeDelimiter.length)
+  advanceBy(context, closeDelimiter.length)
 
   return {
       type: NodeTypes.INTERPOLATION,

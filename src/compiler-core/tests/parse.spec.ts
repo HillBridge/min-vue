@@ -34,4 +34,25 @@ describe("Parse", () => {
       })
     })
   })
+
+  test.only("hello world", () => {
+    const ast = baseParse("<p>hi,{{message}}</p>")
+    expect(ast.children[0]).toStrictEqual({
+      type: NodeTypes.ELEMENT,
+      tag: "p",
+      children: [
+        {
+          type: NodeTypes.TEXT,
+          content: "hi,"
+        },
+        {
+          type: NodeTypes.INTERPOLATION,
+          content: {
+            type: NodeTypes.SIMPLE_EXPRESSION,
+            content: "message"
+          }
+        }
+      ]
+    })
+  })
 })
